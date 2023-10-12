@@ -24,38 +24,41 @@ class MoneyTransferTest {
     dashboardPage = verificationPage.validVerify(verificationCode);
   }
 
-//  @Test
-//  void shouldTransferMoneyBetweenOwnCardsV1() {
-//    var verificationPage = loginPage.validLogin(authInfo);
-//    var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-//    verificationPage.validVerify(verificationCode);
-//  }
 
   @Test
-  void shouldTransferMoneyBetweenOwnCards() {
-    var firstCardinfo = getFirstCardInfo();
+  void transferMoneyBetweenOwnCards() {
+    var firstCardInfo = getFirstCardInfo();
     var secondCardInfo = getSecondCardInfo();
-    var firstCardBalance = dashboardPage.getCardBalance(firstCardinfo);
+    var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
     var secondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
     var amount = generateValidAmount(firstCardBalance);
     var expectedBalanceFirstCard = firstCardBalance - amount;
-    var expectedBalanceSecondCard = firstCardBalance + amount;
+    var expectedBalanceSecondCard = secondCardBalance + amount;
     var transferPage = dashboardPage.selectCardToTransfer(secondCardInfo);
-    dashboardPage = transferPage.makeValidTransfer(String.valueOf(amount),firstCardinfo);
-    var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardinfo);
+    dashboardPage = transferPage.makeValidTransfer(String.valueOf(amount),firstCardInfo);
+    var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardInfo);
     var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCardInfo);
     assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
     assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
 
   }
+
+  @Test
+  void errorMessageIfAmountMoreThenBalance() {
+    var firstCardInfo = getFirstCardInfo();
+    var secondCardInfo = getSecondCardInfo();
+    var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
+    var secondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
+    var amount = generateInvalidAmount(secondCardBalance);
+    var transferPage = dashboardPage.selectCardToTransfer(firstCardInfo);
+    transferPage.makeValidTransfer(String.valueOf(amount),secondCardInfo);
+    transferPage.findErrorMessage("Сумма перевода больше баланса карты");
+    var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardInfo);
+    var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCardInfo);
+    assertEquals(firstCardBalance, actualBalanceFirstCard);
+    assertEquals(secondCardBalance, actualBalanceSecondCard);
+
+  }
 }
-//  @Test
-//  void shouldTransferMoneyBetweenOwnCardsV3() {
-//    var loginPage = open("http://localhost:9999", LoginPageV3.class);
-//    var authInfo = getAuthInfo();
-//    var verificationPage = loginPage.validLogin(authInfo);
-//    var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-//    verificationPage.validVerify(verificationCode);
-//  }
-//}
+
 

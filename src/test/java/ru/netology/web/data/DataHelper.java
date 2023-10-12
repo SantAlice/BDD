@@ -51,16 +51,3 @@ public class DataHelper {
     private String password;
   }
 }
-//  public static AuthInfo getOtherAuthInfo(AuthInfo original) {
-//    return new AuthInfo("petya", "123qwerty");
-//  }
-//
-//  @Value
-//  public static class VerificationCode {
-//    private String code;
-//  }
-//
-//  public static VerificationCode getVerificationCodeFor(AuthInfo authInfo) {
-//    return new VerificationCode("12345");
-//  }
-//}
